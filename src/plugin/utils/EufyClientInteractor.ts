@@ -6,7 +6,7 @@ import { EufySecurity, PropertyName } from 'eufy-security-client';
 
 import { EufyClientNotRunningError, PluginConfigInteractor } from './interfaces';
 import { Logger as TsLogger, ILogObj } from 'tslog';
-import { FFmpegParameters } from './ffmpeg-params';
+import pickPort from 'pick-port';
 
 enum InteractorRequestType {
   DeviceChargingStatus = 'deviceChargingStatus',
@@ -49,7 +49,11 @@ export class EufyClientInteractor extends EventEmitter implements PluginConfigIn
   }
 
   public async setupServer(): Promise<void> {
-    const port = await FFmpegParameters.allocateTCPPort();
+    const port = pickPort({
+      type: 'tcp',
+      ip: '0.0.0.0',
+      reserveTimeout: 15,
+    });
 
     if (!this.writePortToStoragePath(port)) {
       return Promise.reject(new Error('Could not start interaction server'));

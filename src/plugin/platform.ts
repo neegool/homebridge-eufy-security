@@ -51,6 +51,7 @@ import { readFileSync } from 'node:fs';
 
 import ffmpegPath from 'ffmpeg-for-homebridge';
 import { FfmpegCodecs } from './utils/ffmpeg-codecs';
+import { RtpPortAllocator } from './utils/rtp';
 
 export class EufySecurityPlatform implements DynamicPlatformPlugin {
   public readonly Service: typeof Service = this.api.hap.Service;
@@ -69,6 +70,7 @@ export class EufySecurityPlatform implements DynamicPlatformPlugin {
   private already_shutdown: boolean = false;
 
   public codecSupport!: FfmpegCodecs;
+  public readonly rtpPorts: RtpPortAllocator = new RtpPortAllocator();
   public videoProcessor!: string;
 
   public readonly eufyPath: string;

@@ -139,7 +139,10 @@ export class FfmpegCodecs {
       ], () => { }, true))) {
 
         delete this.videoProcessorHwAccels[accel];
-        this.log.error(`Hardware-accelerated decoding and encoding using ${accel} will be unavailable: unable to successfully validate capabilities.`);
+        
+        if (this.platform.verboseFfmpeg) {
+          this.log.error('Hardware-accelerated decoding and encoding using %s will be unavailable: unable to successfully validate capabilities.', accel);
+        }
       }
     }
 
